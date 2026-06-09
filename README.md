@@ -44,6 +44,12 @@ export VNPAY_TMN_CODE="MA_TMN_CODE_CUA_BAN"
 export VNPAY_HASH_SECRET="HASH_SECRET_CUA_BAN"
 export VNPAY_RETURN_URL="https://your-ngrok-url.ngrok-free.app/vnpay-return"
 ```
+### .env
+``` .env
+VNPAY_TMN_CODE="MA_TMN_CODE_CUA_BAN"
+VNPAY_HASH_SECRET="HASH_SECRET_CUA_BAN"
+VNPAY_RETURN_URL="https://your-ngrok-url.ngrok-free.app/vnpay-return"
+```
 
 Nếu chưa có tài khoản sandbox, đăng ký tại trang developer sandbox của VNPAY rồi lấy `TmnCode` và `HashSecret` được gửi về email.
 
@@ -110,23 +116,3 @@ src/main/java/com/lehuuvan/vnpaydemo
 ├── service/PaymentService.java
 └── util/VnpayUtil.java
 ```
-
-## 6. Luồng demo quay video
-
-1. Mở trang `http://localhost:8080` hoặc link Ngrok.
-2. Nhập số tiền, ví dụ `10000`.
-3. Bấm **Thanh toán qua VNPAY**.
-4. Trình duyệt chuyển sang cổng VNPAY Sandbox.
-5. Thao tác thanh toán bằng thẻ/test app sandbox theo tài liệu VNPAY.
-6. VNPAY redirect về `/vnpay-return`.
-7. Quay rõ bảng kết quả trả về gồm mã đơn, số tiền, ngân hàng, mã giao dịch VNPAY, thời gian thanh toán.
-
-## 7. Lưu ý nộp GitHub
-
-Trước khi push GitHub, kiểm tra không có thông tin thật trong:
-
-- `application.properties`
-- README
-- commit history
-
-Chỉ push source code, không push `TmnCode` và `HashSecret` thật.
