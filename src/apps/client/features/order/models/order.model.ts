@@ -20,6 +20,7 @@ export interface OrderItemAttribute {
 export interface OrderItemModel {
     id: number;
     productId: number;
+    variantId: number;
     productName: string;
     productImage: string;
     quantity: number;
