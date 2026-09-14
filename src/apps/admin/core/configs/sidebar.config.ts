@@ -30,4 +30,9 @@ export const ADMIN_SIDEBAR_MENU: SidebarMenuItem[] = [
         path: '/admin/staffs',
         roles: [ERole.ADMIN]
     },
+    {
+        key: 'reviews',
+        label: 'Đánh giá',
+        path: '/admin/reviews'
+    },
 ];
