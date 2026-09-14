@@ -8,6 +8,8 @@ import { ProductDetailPage } from "../pages/products/ProductDetailPage";
 import { OrderListPage } from "../pages/orders/OrderListPage";
 import { OrderDetailPage } from "../pages/orders/OrderDetailPage";
 import { StaffManagementPage } from "../pages/staff/StaffManagementPage";
+import { ReviewListPage } from "../pages/reviews/ReviewListPage";
+import { ReviewDetailPage } from "../pages/reviews/ReviewDetailPage";
 
 import { DashboardPage } from "../pages/dashboard";
 
@@ -25,6 +27,8 @@ export const adminRoutes: RouteObject[] = [
             { path: "/admin/orders", element: <OrderListPage /> },
             { path: "/admin/orders/:id", element: <OrderDetailPage /> },
             { path: "/admin/staffs", element: <StaffManagementPage /> },
+            { path: "/admin/reviews", element: <ReviewListPage /> },
+            { path: "/admin/reviews/:productId", element: <ReviewDetailPage /> },
         ]
     }
 ];
