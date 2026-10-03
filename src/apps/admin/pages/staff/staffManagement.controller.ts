@@ -88,8 +88,9 @@ export const useStaffManagementController = () => {
                     };
                 });
             }
-        } catch (error) {
-            addToast("Đã xảy ra lỗi khi tạo nhân viên", "error");
+        } catch (error: any) {
+            const msg = error?.response?.data?.message || 'Đã xảy ra lỗi khi tạo nhân viên';
+            addToast(msg, "error");
             console.error("Failed to create staff", error);
         }
     };
@@ -116,8 +117,9 @@ export const useStaffManagementController = () => {
                     };
                 });
             }
-        } catch (error) {
-            addToast("Đã xảy ra lỗi khi cập nhật nhân viên", "error");
+        } catch (error: any) {
+            const msg = error?.response?.data?.message || 'Đã xảy ra lỗi khi cập nhật nhân viên';
+            addToast(msg, "error");
             console.error("Failed to update staff", error);
         }
     };
@@ -140,8 +142,9 @@ export const useStaffManagementController = () => {
             if (selectedStaffId === id) {
                 setSelectedStaffId(null);
             }
-        } catch (error) {
-            addToast("Đã xảy ra lỗi khi xóa nhân viên", "error");
+        } catch (error: any) {
+            const msg = error?.response?.data?.message || 'Đã xảy ra lỗi khi xóa nhân viên';
+            addToast(msg, "error");
             console.error("Failed to delete staff", error);
         }
     };

@@ -66,6 +66,11 @@ export const useProductDetailController = () => {
     }, [nameValue, isEditing, form]);
 
     const handleSave = form.handleSubmit((data) => {
+        if (!data.name || !data.name.trim()) {
+            toast('Tên sản phẩm không được để trống.', 'error');
+            return;
+        }
+
         const excludedVariantKeys = (data as any).excludedVariantKeys || [];
         const variants: ProductVariant[] = data.variants || [];
         const activeVariants = variants.filter(v => {
@@ -91,7 +96,9 @@ export const useProductDetailController = () => {
         const totalStockQuantity = activeVariants.reduce((sum, v) => sum + (Number(v.stockQuantity) || 0), 0);
 
         if (minPrice <= 0 || maxPrice < minPrice || totalStockQuantity < 0) {
-            toast("Dữ liệu tổng hợp không hợp lệ.", "error");
+            if (minPrice <= 0) toast("Giá bán của ít nhất một biến thể phải lớn hơn 0.", "error");
+            else if (maxPrice < minPrice) toast("Giá tối đa không thể nhỏ hơn giá tối thiểu.", "error");
+            else toast("Tổng tồn kho không được âm.", "error");
             return;
         }
 
