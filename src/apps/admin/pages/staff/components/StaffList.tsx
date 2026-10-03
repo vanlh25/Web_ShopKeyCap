@@ -9,9 +9,23 @@ interface StaffListProps {
     isError: boolean;
     selectedStaffId: number | null;
     onSelect: (id: number) => void;
+    selectedIds: Set<number>;
+    allSelected: boolean;
+    onToggleSelect: (id: number) => void;
+    onSelectAll: () => void;
 }
 
-export const StaffList: React.FC<StaffListProps> = ({ staffs, isLoading, isError, selectedStaffId, onSelect }) => {
+export const StaffList: React.FC<StaffListProps> = ({ 
+    staffs, 
+    isLoading, 
+    isError, 
+    selectedStaffId, 
+    onSelect,
+    selectedIds,
+    allSelected,
+    onToggleSelect,
+    onSelectAll
+}) => {
     if (isLoading) {
         return (
             <div className="flex flex-col gap-3 py-4">
@@ -37,8 +51,29 @@ export const StaffList: React.FC<StaffListProps> = ({ staffs, isLoading, isError
 
     return (
         <div className="flex flex-col gap-2 pb-8">
+            {/* Select All Toolbar */}
+            <div className="flex items-center justify-between px-3 py-2.5 mb-1 bg-white rounded-xl border border-slate-200 shadow-xs">
+                <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                    <input
+                        type="checkbox"
+                        checked={allSelected}
+                        onChange={onSelectAll}
+                        className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                    />
+                    <span className="text-sm font-medium text-slate-700">
+                        {allSelected ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
+                    </span>
+                </label>
+                {selectedIds.size > 0 && (
+                    <span className="text-xs font-medium text-slate-500">
+                        Đã chọn <strong className="text-blue-600 font-semibold">{selectedIds.size}</strong> / {staffs.length}
+                    </span>
+                )}
+            </div>
+
             {staffs.map(staff => {
-                const isSelected = selectedStaffId === staff.id;
+                const isDetailSelected = selectedStaffId === staff.id;
+                const isChecked = selectedIds.has(staff.id);
                 
                 return (
                     <div
@@ -46,15 +81,32 @@ export const StaffList: React.FC<StaffListProps> = ({ staffs, isLoading, isError
                         onClick={() => onSelect(staff.id)}
                         className={clsx(
                             "group flex items-center justify-between p-4 rounded-xl cursor-pointer transition-all duration-200 border",
-                            isSelected 
-                                ? "bg-blue-50 border-blue-200 shadow-sm" 
+                            isDetailSelected 
+                                ? "bg-blue-50 border-blue-300 shadow-sm" 
+                                : isChecked
+                                ? "bg-slate-50/80 border-blue-200"
                                 : "bg-white border-slate-100 hover:border-slate-300 hover:shadow-sm"
                         )}
                     >
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3">
+                            <div 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onToggleSelect(staff.id);
+                                }}
+                                className="p-1 cursor-pointer flex items-center justify-center shrink-0"
+                            >
+                                <input
+                                    type="checkbox"
+                                    checked={isChecked}
+                                    onChange={() => {}}
+                                    className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                                />
+                            </div>
+
                             <div className={clsx(
                                 "flex items-center justify-center w-10 h-10 rounded-full text-white font-semibold shadow-sm shrink-0",
-                                isSelected ? "bg-blue-500" : "bg-slate-800 group-hover:bg-slate-700"
+                                isDetailSelected ? "bg-blue-500" : "bg-slate-800 group-hover:bg-slate-700"
                             )}>
                                 {String(staff.name).charAt(0).toUpperCase()}
                             </div>
@@ -86,7 +138,7 @@ export const StaffList: React.FC<StaffListProps> = ({ staffs, isLoading, isError
 
                             <ChevronRight className={clsx(
                                 "w-5 h-5 transition-colors",
-                                isSelected ? "text-blue-500" : "text-slate-300 group-hover:text-slate-400"
+                                isDetailSelected ? "text-blue-500" : "text-slate-300 group-hover:text-slate-400"
                             )} />
                         </div>
                     </div>
