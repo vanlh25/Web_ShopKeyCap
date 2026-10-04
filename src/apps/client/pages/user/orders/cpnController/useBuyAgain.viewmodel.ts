@@ -17,7 +17,7 @@ export const useBuyAgainViewModel = (items: OrderItemModel[]) => {
             // Đơn hàng chỉ có 1 sản phẩm — thêm thẳng, không cần popup
             addToCartMutation.mutate(
                 { variantId: items[0].variantId, quantity: 1 },
-                { onSuccess: () => navigate('/cart') }
+                { onSuccess: () => navigate('/checkout') }
             );
         } else {
             // Nhiều sản phẩm — mở popup, mặc định tick tất cả
@@ -58,7 +58,7 @@ export const useBuyAgainViewModel = (items: OrderItemModel[]) => {
         } finally {
             setIsAdding(false);
             setIsModalOpen(false);
-            navigate('/cart');
+            navigate('/checkout');
         }
     }, [selectedItemIds, items, addToCartMutation, navigate]);
 
