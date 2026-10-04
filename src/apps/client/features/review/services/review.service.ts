@@ -2,6 +2,7 @@ import type { ApiResponse } from "../../../../../core/api/apiResponse";
 import { USE_MOCK } from "../../../../../core/config/useMock.config";
 import type { Review } from "../model/review.model";
 import type { CreateReviewRequest } from "../model/create-review.request";
+import type { UpdateReviewRequest } from "../model/update-review.request";
 import type { AvailableReview } from "../model/available-review.model";
 import type { ReviewRepo } from "../repo/review.repo";
 import { ReviewApiRepo } from "../repo/reviewApi.repo";
@@ -22,6 +23,10 @@ export class ReviewService {
 
     async createReview(request: CreateReviewRequest): Promise<ApiResponse<null>> {
         return this.reviewRepo.createReview(request);
+    }
+
+    async updateReview(reviewId: number, request: UpdateReviewRequest): Promise<ApiResponse<null>> {
+        return this.reviewRepo.updateReview(reviewId, request);
     }
 
     async getAvailableReviews(orderId: number): Promise<ApiResponse<AvailableReview[]>> {

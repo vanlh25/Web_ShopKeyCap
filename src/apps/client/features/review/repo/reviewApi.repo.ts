@@ -2,6 +2,7 @@ import { apiClient } from "../../../../../core/api/apiClient";
 import type { ApiResponse } from "../../../../../core/api/apiResponse";
 import type { Review } from "../model/review.model";
 import type { CreateReviewRequest } from "../model/create-review.request";
+import type { UpdateReviewRequest } from "../model/update-review.request";
 import type { AvailableReview } from "../model/available-review.model";
 import type { ReviewRepo } from "./review.repo";
 
@@ -26,6 +27,16 @@ export class ReviewApiRepo implements ReviewRepo {
      */
     async createReview(request: CreateReviewRequest): Promise<ApiResponse<null>> {
         return apiClient.post("/reviews", request);
+    }
+
+    /**
+     * PUT /reviews/:reviewId
+     * @param reviewId
+     * @param request UpdateReviewRequest
+     * @returns Success response
+     */
+    async updateReview(reviewId: number, request: UpdateReviewRequest): Promise<ApiResponse<null>> {
+        return apiClient.put(`/reviews/${reviewId}`, request);
     }
 
     /**

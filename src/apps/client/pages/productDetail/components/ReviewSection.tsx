@@ -69,8 +69,11 @@ export const ReviewSection = () => {
                                 </div>
                             )}
 
-                            <div className="text-[13px] text-slate-400 font-medium mt-1">
-                                {new Date(review.createdAt).toLocaleDateString('vi-VN')}
+                            <div className="text-[13px] text-slate-400 font-medium mt-1 flex items-center gap-2">
+                                <span>{new Date(review.createdAt).toLocaleDateString('vi-VN')}</span>
+                                {review.updatedAt && new Date(review.updatedAt).getTime() !== new Date(review.createdAt).getTime() && (
+                                    <span className="text-blue-500 font-normal">(Đã chỉnh sửa)</span>
+                                )}
                             </div>
                         </div>
                     ))}

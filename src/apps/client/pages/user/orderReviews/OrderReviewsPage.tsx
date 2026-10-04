@@ -14,6 +14,7 @@ export const OrderReviewsPage: React.FC = () => {
         isLoading,
         isError,
         createReviewMutation,
+        updateReviewMutation,
         refetchReviews
     } = useOrderReviewsController();
 
@@ -43,7 +44,7 @@ export const OrderReviewsPage: React.FC = () => {
     const selectedItem = order.items.find(item => item.productId === selectedProductId);
     const existingReview = availableReviews.find(r => r.productId === selectedProductId);
 
-    const handleSubmitReview = (rating: number, content: string) => {
+    const handleSubmitReview = (rating: number, content: string, imageUrls?: string[]) => {
         if (!selectedProductId) return;
 
         createReviewMutation.mutate({
@@ -52,7 +53,8 @@ export const OrderReviewsPage: React.FC = () => {
                 {
                     productId: selectedProductId,
                     rating,
-                    content
+                    content,
+                    imageUrls
                 }
             ]
         }, {
@@ -63,8 +65,23 @@ export const OrderReviewsPage: React.FC = () => {
         });
     };
 
+    const handleUpdateReview = (reviewId: number, rating: number, content: string, imageUrls?: string[]) => {
+        updateReviewMutation.mutate({
+            reviewId,
+            request: {
+                rating,
+                content,
+                imageUrls
+            }
+        }, {
+            onSuccess: () => {
+                refetchReviews();
+            }
+        });
+    };
+
     return (
-        <div className="flex flex-col gap-6 max-w-350 mx-auto w-full">
+        <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full">
             <div>
                 <h1 className="text-2xl font-bold text-slate-900">Đánh giá sản phẩm</h1>
                 <p className="text-slate-500 text-sm mt-1">Chia sẻ nhận xét của bạn về các sản phẩm trong đơn hàng #{order.id}</p>
@@ -72,7 +89,7 @@ export const OrderReviewsPage: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 {/* Left Column: Product List */}
-                <div className="lg:col-span-4 h-full lg:sticky lg:top-6">
+                <div className="lg:col-span-4 xl:col-span-4 h-full lg:sticky lg:top-6">
                     <ProductListSidebar 
                         order={order}
                         availableReviews={availableReviews}
@@ -82,18 +99,19 @@ export const OrderReviewsPage: React.FC = () => {
                 </div>
 
                 {/* Center Column: Review Editor */}
-                <div className="lg:col-span-5 h-full">
+                <div className="lg:col-span-8 xl:col-span-5 h-full">
                     <ReviewEditor 
                         orderId={order.id}
                         selectedItem={selectedItem}
                         existingReview={existingReview}
-                        isSubmitting={createReviewMutation.isPending}
+                        isSubmitting={createReviewMutation.isPending || updateReviewMutation.isPending}
                         onSubmitReview={handleSubmitReview}
+                        onUpdateReview={handleUpdateReview}
                     />
                 </div>
 
                 {/* Right Column: Review Summary */}
-                <div className="lg:col-span-3 h-full lg:sticky lg:top-6">
+                <div className="lg:col-span-12 xl:col-span-3 h-full lg:sticky lg:top-6">
                     <ReviewSummary 
                         order={order}
                         availableReviews={availableReviews}

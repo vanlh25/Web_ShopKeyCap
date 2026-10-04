@@ -11,6 +11,7 @@ export interface Review {
     rating: number;
     content: string;
     createdAt: Date;
+    updatedAt?: Date;
 
     /**
      * Ảnh đính kèm

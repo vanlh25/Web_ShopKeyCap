@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useOrderDetailQuery } from "../../../features/order/hooks/queries/useOrderDetail.query";
-import { useAvailableReviews, useCreateReview } from "../../../features/review";
+import { useAvailableReviews, useCreateReview, useUpdateReview } from "../../../features/review";
 
 export const useOrderReviewsController = () => {
     const { id } = useParams<{ id: string }>();
@@ -26,6 +26,9 @@ export const useOrderReviewsController = () => {
 
     // Create review mutation
     const createReviewMutation = useCreateReview();
+
+    // Update review mutation
+    const updateReviewMutation = useUpdateReview();
 
     const order = orderData;
     const availableReviews = reviewsData?.data || [];
@@ -62,6 +65,7 @@ export const useOrderReviewsController = () => {
         isLoading: isOrderLoading || isReviewsLoading,
         isError: isOrderError || !order,
         createReviewMutation,
+        updateReviewMutation,
         refetchReviews
     };
 };
