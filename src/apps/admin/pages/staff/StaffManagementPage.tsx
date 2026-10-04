@@ -3,7 +3,7 @@ import { useStaffManagementController } from './staffManagement.controller';
 import { StaffList } from './components/StaffList';
 import { StaffDetailPanel } from './components/StaffDetailPanel';
 import { StaffModal } from './components/StaffModal';
-import { Search, Plus } from 'lucide-react';
+import { Search, Plus, Trash2 } from 'lucide-react';
 import clsx from 'clsx';
 import { ConfirmModal } from '../../components/ConfirmModal';
 
@@ -51,12 +51,39 @@ export const StaffManagementPage: React.FC = () => {
                     "h-full overflow-y-auto transition-all duration-300 ease-in-out",
                     ctrl.selectedStaffId ? "w-1/2 pr-3" : "w-full"
                 )}>
+                    {ctrl.selectedIds.size > 0 && (
+                        <div className="mb-4 flex items-center justify-between gap-3 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl shadow-xs">
+                            <span className="text-sm font-medium text-blue-900">
+                                Đã chọn <strong>{ctrl.selectedIds.size}</strong> nhân viên
+                            </span>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={ctrl.handleSelectAll}
+                                    className="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+                                >
+                                    Bỏ chọn
+                                </button>
+                                <button
+                                    onClick={ctrl.handleBulkDelete}
+                                    disabled={ctrl.isBulkDeleting}
+                                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors disabled:opacity-50 shadow-sm"
+                                >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                    {ctrl.isBulkDeleting ? 'Đang xóa...' : `Xóa (${ctrl.selectedIds.size})`}
+                                </button>
+                            </div>
+                        </div>
+                    )}
                     <StaffList 
                         staffs={ctrl.staffs}
                         isLoading={ctrl.isStaffsLoading}
                         isError={ctrl.isStaffsError}
                         selectedStaffId={ctrl.selectedStaffId}
                         onSelect={ctrl.handleSelectStaff}
+                        selectedIds={ctrl.selectedIds}
+                        allSelected={ctrl.allSelected}
+                        onToggleSelect={ctrl.handleToggleSelect}
+                        onSelectAll={ctrl.handleSelectAll}
                     />
                 </div>
 

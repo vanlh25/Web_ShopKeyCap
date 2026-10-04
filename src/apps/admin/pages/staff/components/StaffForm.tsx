@@ -18,7 +18,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({ mode, initialData, onSubmi
         <form onSubmit={handleFormSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700">Tên nhân viên</label>
+                    <label className="text-sm font-medium text-slate-700">Tên nhân viên <span className="text-red-500">*</span></label>
                     <input
                         type="text"
                         {...register("name", { required: "Tên không được để trống" })}
@@ -29,7 +29,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({ mode, initialData, onSubmi
                 </div>
 
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700">Email</label>
+                    <label className="text-sm font-medium text-slate-700">Email <span className="text-red-500">*</span></label>
                     <input
                         type="email"
                         {...register("email", {
@@ -43,7 +43,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({ mode, initialData, onSubmi
                 </div>
 
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700">Số điện thoại</label>
+                    <label className="text-sm font-medium text-slate-700">Số điện thoại <span className="text-red-500">*</span></label>
                     <input
                         type="text"
                         {...register("phonenumber", { required: "Số điện thoại không được để trống" })}
@@ -54,7 +54,7 @@ export const StaffForm: React.FC<StaffFormProps> = ({ mode, initialData, onSubmi
                 </div>
 
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700">Ngày sinh</label>
+                    <label className="text-sm font-medium text-slate-700">Ngày sinh <span className="text-red-500">*</span></label>
                     <input
                         type="date"
                         {...register("dob", { required: "Ngày sinh không được để trống" })}
@@ -69,13 +69,14 @@ export const StaffForm: React.FC<StaffFormProps> = ({ mode, initialData, onSubmi
                         {...register("gender")}
                         className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                     >
+                        <option value="">-- Chọn giới tính --</option>
                         <option value="MALE">Nam</option>
                         <option value="FEMALE">Nữ</option>
                     </select>
                 </div>
 
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700">Mức lương (VNĐ)</label>
+                    <label className="text-sm font-medium text-slate-700">Mức lương (VNĐ) <span className="text-red-500">*</span></label>
                     <input
                         type="number"
                         {...register("salary", { required: "Mức lương không được để trống", min: { value: 0, message: "Mức lương không hợp lệ" } })}

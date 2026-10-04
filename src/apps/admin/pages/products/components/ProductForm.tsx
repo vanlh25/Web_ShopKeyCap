@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const ProductForm: React.FC<Props> = ({ form, isEditing }) => {
-    const { register, watch, setValue, control } = form;
+    const { register, watch, setValue, control, formState: { errors } } = form;
     const imageUrl = watch('imageUrl');
     const thumbnailUrl = watch('thumbnailUrl') || [];
     const name = watch('name') || '';
@@ -114,13 +114,16 @@ export const ProductForm: React.FC<Props> = ({ form, isEditing }) => {
                         <h2 className="text-[16px] font-bold text-slate-900 border-b border-slate-100 pb-3">Thông tin cơ bản</h2>
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <label className="block text-sm font-bold text-slate-700">Tên sản phẩm *</label>
+                                <label className="block text-sm font-bold text-slate-700">Tên sản phẩm <span className="text-red-500">*</span></label>
                                 <input
-                                    {...register('name')}
+                                    {...register('name', { required: 'Tên sản phẩm không được để trống' })}
                                     disabled={!isEditing}
-                                    className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all disabled:bg-slate-50 disabled:text-slate-600 font-medium text-slate-900"
+                                    className={`w-full px-4 py-2.5 rounded-lg border focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all disabled:bg-slate-50 disabled:text-slate-600 font-medium text-slate-900 ${
+                                        errors.name ? 'border-red-500' : 'border-slate-300'
+                                    }`}
                                     placeholder="Ví dụ: Bàn phím cơ AKKO 3098..."
                                 />
+                                {errors.name && <span className="text-xs text-red-500">{errors.name.message as string}</span>}
                             </div>
                             <div className="space-y-2">
                                 <label className="block text-sm font-bold text-slate-700">Đường dẫn (Slug)</label>

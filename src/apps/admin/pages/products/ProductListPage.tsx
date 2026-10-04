@@ -2,7 +2,7 @@ import React from "react";
 import { useProductListController } from "./ProductList.controller";
 import { AdminProductCard } from "./components/AdminProductCard";
 import { ProductFloatingActions } from "../../components/floating-action/ProductFloatingActions";
-import { Search } from "lucide-react";
+import { Search, Trash2 } from "lucide-react";
 
 export const ProductListPage: React.FC = () => {
     const listCtrl = useProductListController();
@@ -35,7 +35,46 @@ export const ProductListPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Grid 100% width, tự responsive theo số cột */}
+            {/* Select All toolbar */}
+            {listCtrl.products.length > 0 && (
+                <div className="flex items-center gap-3 mb-4">
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                            type="checkbox"
+                            checked={listCtrl.allSelected}
+                            onChange={listCtrl.handleSelectAll}
+                            className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                        />
+                        <span className="text-sm font-medium text-slate-600">
+                            {listCtrl.allSelected ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
+                        </span>
+                    </label>
+                    {listCtrl.selectedIds.size > 0 && (
+                        <span className="text-sm text-slate-500">
+                            Đã chọn <strong className="text-slate-800">{listCtrl.selectedIds.size}</strong> sản phẩm
+                        </span>
+                    )}
+                </div>
+            )}
+
+            {/* Bulk action bar */}
+            {listCtrl.selectedIds.size > 0 && (
+                <div className="mb-4 flex items-center gap-3 px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl">
+                    <span className="text-sm font-medium text-blue-700 flex-1">
+                        {listCtrl.selectedIds.size} sản phẩm được chọn
+                    </span>
+                    <button
+                        onClick={listCtrl.handleBulkDelete}
+                        disabled={listCtrl.isBulkDeleting}
+                        className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <Trash2 className="w-4 h-4" />
+                        {listCtrl.isBulkDeleting ? 'Đang xóa...' : `Xóa ${listCtrl.selectedIds.size} sản phẩm`}
+                    </button>
+                </div>
+            )}
+
+            {/* Grid */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
                 {listCtrl.products.map(product => (
                     <AdminProductCard 
@@ -43,11 +82,13 @@ export const ProductListPage: React.FC = () => {
                         product={product} 
                         onDelete={() => listCtrl.handleDelete(product.id)}
                         isDeleting={listCtrl.isDeleting}
+                        isSelected={listCtrl.selectedIds.has(product.id)}
+                        onToggleSelect={() => listCtrl.handleToggleSelect(product.id)}
                     />
                 ))}
             </div>
 
-            {/* Pagination UI basic */}
+            {/* Pagination */}
             {listCtrl.pagination && listCtrl.pagination.totalPages > 1 && (
                 <div className="mt-10 flex justify-center items-center space-x-2">
                     <button 
