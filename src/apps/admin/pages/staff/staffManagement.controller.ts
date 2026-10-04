@@ -25,6 +25,7 @@ export const useStaffManagementController = () => {
     // Modal state
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
+    const [confirmModal, setConfirmModal] = useState<{isOpen: boolean; title: string; message: string; onConfirm: () => void} | null>(null);
 
     const queryClient = useQueryClient();
 
@@ -128,29 +129,36 @@ export const useStaffManagementController = () => {
         }
     };
 
-    const handleDeleteStaff = async (id: number) => {
-        if (!confirm("Bạn có chắc chắn muốn xóa nhân viên này không?")) return;
-        try {
-            await deleteMutation.mutateAsync(id);
-            addToast("Xóa nhân viên thành công", "success");
-            
-            queryClient.setQueriesData({ queryKey: staffKeys.lists() }, (oldData: any) => {
-                if (!oldData || !oldData.data) return oldData;
-                return {
-                    ...oldData,
-                    data: oldData.data.filter((item: any) => item.id !== id)
-                };
-            });
-            queryClient.removeQueries({ queryKey: staffKeys.detail(id) });
+    const handleDeleteStaff = (id: number) => {
+        setConfirmModal({
+            isOpen: true,
+            title: 'Xóa nhân viên',
+            message: 'Bạn có chắc chắn muốn xóa nhân viên này không? Hành động này không thể hoàn tác.',
+            onConfirm: async () => {
+                try {
+                    await deleteMutation.mutateAsync(id);
+                    addToast("Xóa nhân viên thành công", "success");
+                    
+                    queryClient.setQueriesData({ queryKey: staffKeys.lists() }, (oldData: any) => {
+                        if (!oldData || !oldData.data) return oldData;
+                        return {
+                            ...oldData,
+                            data: oldData.data.filter((item: any) => item.id !== id)
+                        };
+                    });
+                    queryClient.removeQueries({ queryKey: staffKeys.detail(id) });
 
-            if (selectedStaffId === id) {
-                setSelectedStaffId(null);
+                    if (selectedStaffId === id) {
+                        setSelectedStaffId(null);
+                    }
+                    setConfirmModal(null);
+                } catch (error: any) {
+                    const msg = error?.response?.data?.message || 'Đã xảy ra lỗi khi xóa nhân viên';
+                    addToast(msg, "error");
+                    console.error("Failed to delete staff", error);
+                }
             }
-        } catch (error: any) {
-            const msg = error?.response?.data?.message || 'Đã xảy ra lỗi khi xóa nhân viên';
-            addToast(msg, "error");
-            console.error("Failed to delete staff", error);
-        }
+        });
     };
 
     const currentStaffs = staffsData?.data || [];
@@ -256,6 +264,10 @@ export const useStaffManagementController = () => {
         handleDeleteStaff,
         handleToggleSelect,
         handleSelectAll,
-        handleBulkDelete
+        handleBulkDelete,
+        
+        // Confirm Modal
+        confirmModal,
+        setConfirmModal
     };
 };
