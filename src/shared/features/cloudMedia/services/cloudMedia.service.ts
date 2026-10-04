@@ -83,6 +83,23 @@ export class CloudMediaService {
     async upload(files: File[]): Promise<MediaEntity[]> {
         if (!files || files.length === 0) return [];
 
+        // Kiểm tra trùng lặp tên file trong danh sách tải lên
+        const nameSet = new Set<string>();
+        const duplicates: string[] = [];
+        for (const file of files) {
+            const cleanName = file.name.trim();
+            const lowerName = cleanName.toLowerCase();
+            if (nameSet.has(lowerName)) {
+                duplicates.push(cleanName);
+            } else {
+                nameSet.add(lowerName);
+            }
+        }
+        if (duplicates.length > 0) {
+            const uniqueDupes = Array.from(new Set(duplicates));
+            throw new Error(`Danh sách tải lên chứa các file trùng tên: ${uniqueDupes.join(", ")}`);
+        }
+
         try {
             const signatureData = await this.getValidSignature();
 
