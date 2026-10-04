@@ -5,17 +5,18 @@ import { StaffDetailPanel } from './components/StaffDetailPanel';
 import { StaffModal } from './components/StaffModal';
 import { Search, Plus } from 'lucide-react';
 import clsx from 'clsx';
+import { ConfirmModal } from '../../components/ConfirmModal';
 
 export const StaffManagementPage: React.FC = () => {
     const ctrl = useStaffManagementController();
 
     return (
-        <div className="flex flex-col w-full h-[calc(100vh-80px)] overflow-hidden bg-slate-50 relative">
+        <div className="w-full pb-20">
             {/* Header Area */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 bg-white border-b border-slate-200 shrink-0 z-10">
+            <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900">Quản lý Nhân viên</h1>
-                    <p className="text-sm text-slate-500 mt-1">Quản lý danh sách nhân viên và phân quyền trong hệ thống</p>
+                    <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Quản lý Nhân viên</h1>
+                    <p className="text-slate-500 mt-1 text-sm">Quản lý danh sách nhân viên và phân quyền trong hệ thống</p>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -29,7 +30,7 @@ export const StaffManagementPage: React.FC = () => {
                                 if (e.key === 'Enter') ctrl.handleSearch(e.currentTarget.value);
                             }}
                             onBlur={(e) => ctrl.handleSearch(e.target.value)}
-                            className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm"
+                            className="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                         />
                     </div>
                     
@@ -44,10 +45,10 @@ export const StaffManagementPage: React.FC = () => {
             </div>
 
             {/* Main Content Area: Split Pane */}
-            <div className="flex flex-1 overflow-hidden relative">
+            <div className="flex relative h-[calc(100vh-200px)] overflow-hidden rounded-xl bg-slate-50/50">
                 {/* Left Pane: Staff List */}
                 <div className={clsx(
-                    "h-full overflow-y-auto transition-all duration-300 ease-in-out p-6",
+                    "h-full overflow-y-auto transition-all duration-300 ease-in-out",
                     ctrl.selectedStaffId ? "w-1/2 pr-3" : "w-full"
                 )}>
                     <StaffList 
@@ -85,6 +86,15 @@ export const StaffManagementPage: React.FC = () => {
                 onClose={ctrl.handleCloseModal}
                 onSubmit={ctrl.modalMode === 'create' ? ctrl.handleCreateStaff : ctrl.handleUpdateStaff}
                 isSubmitting={ctrl.isSubmitting}
+            />
+            
+            <ConfirmModal 
+                isOpen={!!ctrl.confirmModal?.isOpen}
+                title={ctrl.confirmModal?.title || ''}
+                message={ctrl.confirmModal?.message || ''}
+                onConfirm={() => ctrl.confirmModal?.onConfirm()}
+                onCancel={() => ctrl.setConfirmModal(null)}
+                isDestructive={true}
             />
         </div>
     );
