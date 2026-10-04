@@ -1,6 +1,7 @@
 // homepage.tsx
 import HeroSection from "./components/HeroSection";
 import Section from "./components/Section";
+import { BannerSlider } from "./components/BannerSlider";
 import { useHomepageController } from "./homepage.controller";
 
 export const HomePage = () => {
@@ -9,6 +10,10 @@ export const HomePage = () => {
     return (
         <div className="w-full pb-20">
             <HeroSection />
+
+            <div className="max-w-7xl mx-auto px-6 mt-8 relative z-20">
+                <BannerSlider />
+            </div>
 
             <div className="space-y-4">
 

@@ -25,6 +25,26 @@ export const ADMIN_SIDEBAR_MENU: SidebarMenuItem[] = [
         path: '/admin/orders'
     },
     {
+        key: 'banners',
+        label: 'Banner',
+        path: '/admin/banners'
+    },
+    {
+        key: 'brands',
+        label: 'Thương hiệu',
+        path: '/admin/brands'
+    },
+    {
+        key: 'categories',
+        label: 'Danh mục',
+        path: '/admin/categories'
+    },
+    {
+        key: 'customers',
+        label: 'Khách hàng',
+        path: '/admin/customers'
+    },
+    {
         key: 'staffs',
         label: 'Nhân viên',
         path: '/admin/staffs',
