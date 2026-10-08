@@ -63,9 +63,24 @@ function Header() {
 
                     <div className="w-px h-6 bg-slate-200 mx-1"></div>
 
-                    {/* Cart - Profile || Login button */}
+                    {/* Cart - Wishlist - Profile || Login button */}
                     {controller.user ? (
                         <div className="flex items-center gap-2.5">
+                            {/* Wishlist button */}
+                            <Link
+                                to="/user/wishlist"
+                                className="group relative w-10 h-10 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-red-500 transition-colors flex items-center justify-center"
+                            >
+                                <span className="material-icons-outlined text-[20px]">
+                                    favorite_border
+                                </span>
+
+                                {/* Tooltip */}
+                                <div className="absolute top-12 right-0 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-2 text-sm text-white shadow-lg opacity-0 invisible translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 z-50">
+                                    Danh sách yêu thích
+                                </div>
+                            </Link>
+
                             {/* Cart button */}
                             <Link
                                 to="/cart"
@@ -82,7 +97,7 @@ function Header() {
                                 )}
 
                                 {/* Tooltip */}
-                                <div className="absolute top-12 right-0 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-2 text-sm text-white shadow-lg opacity-0 invisible translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
+                                <div className="absolute top-12 right-0 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-2 text-sm text-white shadow-lg opacity-0 invisible translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 z-50">
                                     {cartCount === 0 ? "Giỏ hàng trống" : `Giỏ hàng có ${cartCount} sản phẩm`}
                                 </div>
                             </Link>
@@ -122,6 +137,10 @@ function Header() {
                                     <Link to="/user/profile" className="flex items-center gap-2 px-4 py-2.5 text-[15px] text-slate-600 hover:bg-slate-50 hover:text-[#2563eb] transition-colors">
                                         <span className="material-icons-outlined text-[20px]">manage_accounts</span>
                                         Hồ sơ cá nhân
+                                    </Link>
+                                    <Link to="/user/wishlist" className="flex items-center gap-2 px-4 py-2.5 text-[15px] text-slate-600 hover:bg-slate-50 hover:text-[#2563eb] transition-colors">
+                                        <span className="material-icons-outlined text-[20px]">favorite_border</span>
+                                        Sản phẩm yêu thích
                                     </Link>
                                     <button
                                         onClick={controller.handleLogout}

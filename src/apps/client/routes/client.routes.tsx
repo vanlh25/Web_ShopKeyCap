@@ -15,6 +15,7 @@ import OrderDetailPage from "../pages/user/orders/OrderDetailPage";
 import { OrderReviewsPage } from "../pages/user/orderReviews";
 import { ERole } from "../../../core/constants/role.constant";
 import AddressPage from "../pages/user/address/AddressPage";
+import WishlistPage from "../pages/user/wishlist/WishlistPage";
 
 export const clientRoutes: RouteObject[] = [
     {
@@ -56,8 +57,10 @@ export const clientRoutes: RouteObject[] = [
                             { path: "orders/:id", element: <OrderDetailPage /> },
                             { path: "orders/:id/reviews", element: <OrderReviewsPage /> },
                             { path: "addresses", element: <AddressPage /> },
+                            { path: "wishlist", element: <WishlistPage /> },
                         ]
                     },
+                    { path: "/wishlist", element: <Navigate to="/user/wishlist" replace /> },
                     { path: "/cart", element: <CartPage /> },
                     { path: "/checkout", element: <OrderCheckoutPage /> },
                     { path: "/order/checkout/result", element: <OrderResultPage /> },
