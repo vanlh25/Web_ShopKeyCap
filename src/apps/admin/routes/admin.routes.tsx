@@ -14,6 +14,8 @@ import { CustomerManagementPage } from "../pages/customers/CustomerManagementPag
 import { CategoryManagementPage } from "../pages/categories/CategoryManagementPage";
 import { BrandManagementPage } from "../pages/brands/BrandManagementPage";
 import { BannerManagementPage } from "../pages/banners/BannerManagementPage";
+import { FlashSaleListPage } from "../pages/flashSales/FlashSaleListPage";
+import { FlashSaleDetailPage } from "../pages/flashSales/FlashSaleDetailPage";
 
 import { DashboardPage } from "../pages/dashboard";
 
@@ -30,6 +32,8 @@ export const adminRoutes: RouteObject[] = [
             { path: "/admin/products/:id", element: <ProductDetailPage /> },
             { path: "/admin/orders", element: <OrderListPage /> },
             { path: "/admin/orders/:id", element: <OrderDetailPage /> },
+            { path: "/admin/flash-sales", element: <FlashSaleListPage /> },
+            { path: "/admin/flash-sales/:id", element: <FlashSaleDetailPage /> },
             { path: "/admin/banners", element: <BannerManagementPage /> },
             { path: "/admin/brands", element: <BrandManagementPage /> },
             { path: "/admin/categories", element: <CategoryManagementPage /> },
