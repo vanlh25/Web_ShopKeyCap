@@ -2,10 +2,16 @@ import DOMPurify from "dompurify";
 import { useProductDetailViewModel } from "./useProductDetail.viewmodel";
 import ProductCard from "../homepage/components/ProductCard";
 import { ReviewSection } from "./components/ReviewSection";
+import { useVariantFlashSaleQuery } from "../../features/flashSales/hooks/useVariantFlashSale.query";
+import { useActiveFlashSaleQuery } from "../../features/flashSales/hooks/useActiveFlashSale.query";
+import { CountdownTimer } from "../../features/flashSales/components/CountdownTimer";
 
 export const ProductDetailPage = () => {
     const controller = useProductDetailViewModel();
     const { product, isLoading, error } = controller;
+    const { data: flashSaleItem } = useVariantFlashSaleQuery(controller.currentVariant?.id);
+    const { data: activeFlashSale } = useActiveFlashSaleQuery();
+    const remainingSeconds = activeFlashSale?.currentSlot?.remainingSeconds || 0;
 
     if (isLoading) {
         return (
@@ -75,10 +81,57 @@ export const ProductDetailPage = () => {
                         <span className="text-slate-500">Mã: <span className="font-bold text-slate-700">{controller.currentVariant?.sku || product.id}</span></span>
                     </div>
 
+                    {/* Flash Sale Banner (nếu variant đang trong chiến dịch Flash Sale) */}
+                    {flashSaleItem && !flashSaleItem.isSoldOut && (
+                        <div className="mb-5 bg-gradient-to-r from-red-50 via-rose-50/60 to-orange-50/40 border border-red-200/90 rounded-xl p-4 shadow-xs">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                                <div className="flex items-center gap-2 font-extrabold tracking-wide text-[14px] text-red-700 uppercase">
+                                    <span className="text-amber-500 text-lg animate-flicker">⚡</span>
+                                    <span>FLASH SALE GIỜ VÀNG</span>
+                                    <span className="bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded shadow-xs">
+                                        -{flashSaleItem.discountPercent}%
+                                    </span>
+                                </div>
+                                {remainingSeconds > 0 && (
+                                    <div className="flex items-center gap-2">
+                                        <CountdownTimer initialSeconds={remainingSeconds} variant="compact" theme="danger" label="KẾT THÚC TRONG" />
+                                    </div>
+                                )}
+                            </div>
+                            <div className="mt-3 flex items-center gap-3">
+                                <div className="flex-1 bg-red-100 rounded-full h-2.5 overflow-hidden relative">
+                                    <div
+                                        className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-600 h-full rounded-full transition-all duration-500 relative overflow-hidden"
+                                        style={{ width: `${Math.min(100, Math.max(8, flashSaleItem.percentSold))}%` }}
+                                    >
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer" />
+                                    </div>
+                                </div>
+                                <span className="text-xs font-bold text-red-700 shrink-0 flex items-center gap-1">
+                                    <span className="animate-flicker">🔥</span>
+                                    <span>Đã bán {flashSaleItem.soldSlots}/{flashSaleItem.totalSlots} suất ({flashSaleItem.percentSold}%)</span>
+                                </span>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Price Block */}
                     <div className="bg-slate-50 rounded-md p-6 mb-8 border border-slate-200">
-                        {controller.currentVariant ? (
-                            // Đã chọn variant: hiển thị giá thực tế của variant
+                        {flashSaleItem && !flashSaleItem.isSoldOut ? (
+                            // Đang có Flash Sale cho variant này
+                            <div className="flex items-end gap-3 flex-wrap">
+                                <span className="text-[34px] font-extrabold text-red-600 leading-none">
+                                    {controller.formatPrice(flashSaleItem.flashSalePrice)}
+                                </span>
+                                <span className="text-[16px] font-medium text-slate-400 line-through mb-1">
+                                    {controller.formatPrice(flashSaleItem.originalPrice)}
+                                </span>
+                                <span className="px-2.5 py-1 rounded-full bg-red-600 text-white text-[13px] font-bold mb-1 shadow-xs">
+                                    -{flashSaleItem.discountPercent}% FLASH SALE
+                                </span>
+                            </div>
+                        ) : controller.currentVariant ? (
+                            // Đã chọn variant thường
                             <div className="flex items-end gap-3 flex-wrap">
                                 <span className="text-[32px] font-extrabold text-blue-600 leading-none">
                                     {controller.formatPrice(controller.displayPrice!)}

@@ -15,6 +15,9 @@ import OrderDetailPage from "../pages/user/orders/OrderDetailPage";
 import { OrderReviewsPage } from "../pages/user/orderReviews";
 import { ERole } from "../../../core/constants/role.constant";
 import AddressPage from "../pages/user/address/AddressPage";
+import WishlistPage from "../pages/user/wishlist/WishlistPage";
+
+import FlashSalePage from "../pages/flashSale/FlashSalePage";
 
 export const clientRoutes: RouteObject[] = [
     {
@@ -31,6 +34,7 @@ export const clientRoutes: RouteObject[] = [
                 ),
                 children: [
                     { path: "/", element: <HomePage /> },
+                    { path: "/flash-sale", element: <FlashSalePage /> },
                     { path: "/products", element: <ProductsPage /> },
                     { path: "/product/:slug", element: <ProductDetailPage /> }
                 ]
@@ -56,8 +60,10 @@ export const clientRoutes: RouteObject[] = [
                             { path: "orders/:id", element: <OrderDetailPage /> },
                             { path: "orders/:id/reviews", element: <OrderReviewsPage /> },
                             { path: "addresses", element: <AddressPage /> },
+                            { path: "wishlist", element: <WishlistPage /> },
                         ]
                     },
+                    { path: "/wishlist", element: <Navigate to="/user/wishlist" replace /> },
                     { path: "/cart", element: <CartPage /> },
                     { path: "/checkout", element: <OrderCheckoutPage /> },
                     { path: "/order/checkout/result", element: <OrderResultPage /> },

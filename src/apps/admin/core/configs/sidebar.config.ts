@@ -25,6 +25,11 @@ export const ADMIN_SIDEBAR_MENU: SidebarMenuItem[] = [
         path: '/admin/orders'
     },
     {
+        key: 'flash-sales',
+        label: 'Flash Sale',
+        path: '/admin/flash-sales'
+    },
+    {
         key: 'banners',
         label: 'Banner',
         path: '/admin/banners'

@@ -43,6 +43,19 @@ function Header() {
                 {/* Drop down menu | live button | profile button*/}
                 <div className="flex items-center gap-3 shrink-0 pr-1">
 
+                    {/* Flash Sale link */}
+                    <Link
+                        to="/flash-sale"
+                        className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-red-600 via-rose-600 to-red-600 text-white font-bold text-[14px] shadow-sm shadow-red-500/30 hover:shadow-md hover:shadow-red-500/40 hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5 group"
+                    >
+                        <span className="text-amber-300 animate-flicker">⚡</span>
+                        <span>Flash Sale</span>
+                        <span className="relative flex h-2 w-2 ml-0.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-80"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+                        </span>
+                    </Link>
+
                     <div className="relative group">
                         <button className="px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center gap-1 text-[17px] font-medium">
                             Danh mục <span className="material-icons-outlined text-[30px]">expand_more</span>
@@ -51,6 +64,7 @@ function Header() {
                         <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-slate-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
                             <Link to="/" className="block px-4 py-2 text-[15px] text-slate-600 hover:bg-slate-50 hover:text-[#2563eb] transition-colors">Trang chủ</Link>
                             <Link to="/products" className="block px-4 py-2 text-[15px] text-slate-600 hover:bg-slate-50 hover:text-[#2563eb] transition-colors">Sản phẩm</Link>
+                            <Link to="/flash-sale" className="block px-4 py-2 text-[15px] font-semibold text-red-600 hover:bg-red-50 transition-colors">⚡ Săn Flash Sale</Link>
                             <Link to="/about" className="block px-4 py-2 text-[15px] text-slate-600 hover:bg-slate-50 hover:text-[#2563eb] transition-colors">Giới thiệu</Link>
                         </div>
                     </div>
@@ -63,9 +77,24 @@ function Header() {
 
                     <div className="w-px h-6 bg-slate-200 mx-1"></div>
 
-                    {/* Cart - Profile || Login button */}
+                    {/* Cart - Wishlist - Profile || Login button */}
                     {controller.user ? (
                         <div className="flex items-center gap-2.5">
+                            {/* Wishlist button */}
+                            <Link
+                                to="/user/wishlist"
+                                className="group relative w-10 h-10 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-red-500 transition-colors flex items-center justify-center"
+                            >
+                                <span className="material-icons-outlined text-[20px]">
+                                    favorite_border
+                                </span>
+
+                                {/* Tooltip */}
+                                <div className="absolute top-12 right-0 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-2 text-sm text-white shadow-lg opacity-0 invisible translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 z-50">
+                                    Danh sách yêu thích
+                                </div>
+                            </Link>
+
                             {/* Cart button */}
                             <Link
                                 to="/cart"
@@ -82,7 +111,7 @@ function Header() {
                                 )}
 
                                 {/* Tooltip */}
-                                <div className="absolute top-12 right-0 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-2 text-sm text-white shadow-lg opacity-0 invisible translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
+                                <div className="absolute top-12 right-0 whitespace-nowrap rounded-lg bg-slate-900 px-3 py-2 text-sm text-white shadow-lg opacity-0 invisible translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 z-50">
                                     {cartCount === 0 ? "Giỏ hàng trống" : `Giỏ hàng có ${cartCount} sản phẩm`}
                                 </div>
                             </Link>
@@ -122,6 +151,10 @@ function Header() {
                                     <Link to="/user/profile" className="flex items-center gap-2 px-4 py-2.5 text-[15px] text-slate-600 hover:bg-slate-50 hover:text-[#2563eb] transition-colors">
                                         <span className="material-icons-outlined text-[20px]">manage_accounts</span>
                                         Hồ sơ cá nhân
+                                    </Link>
+                                    <Link to="/user/wishlist" className="flex items-center gap-2 px-4 py-2.5 text-[15px] text-slate-600 hover:bg-slate-50 hover:text-[#2563eb] transition-colors">
+                                        <span className="material-icons-outlined text-[20px]">favorite_border</span>
+                                        Sản phẩm yêu thích
                                     </Link>
                                     <button
                                         onClick={controller.handleLogout}

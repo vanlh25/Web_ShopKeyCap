@@ -1,7 +1,7 @@
-// homepage.tsx
 import HeroSection from "./components/HeroSection";
 import Section from "./components/Section";
 import { BannerSlider } from "./components/BannerSlider";
+import { FlashSaleHomeSection } from "./components/FlashSaleHomeSection";
 import { useHomepageController } from "./homepage.controller";
 
 export const HomePage = () => {
@@ -14,6 +14,8 @@ export const HomePage = () => {
             <div className="max-w-7xl mx-auto px-6 mt-8 relative z-20">
                 <BannerSlider />
             </div>
+
+            <FlashSaleHomeSection />
 
             <div className="space-y-4">
 
