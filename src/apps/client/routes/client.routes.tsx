@@ -17,6 +17,8 @@ import { ERole } from "../../../core/constants/role.constant";
 import AddressPage from "../pages/user/address/AddressPage";
 import WishlistPage from "../pages/user/wishlist/WishlistPage";
 
+import FlashSalePage from "../pages/flashSale/FlashSalePage";
+
 export const clientRoutes: RouteObject[] = [
     {
         element: <ClientLayout />,
@@ -32,6 +34,7 @@ export const clientRoutes: RouteObject[] = [
                 ),
                 children: [
                     { path: "/", element: <HomePage /> },
+                    { path: "/flash-sale", element: <FlashSalePage /> },
                     { path: "/products", element: <ProductsPage /> },
                     { path: "/product/:slug", element: <ProductDetailPage /> }
                 ]
