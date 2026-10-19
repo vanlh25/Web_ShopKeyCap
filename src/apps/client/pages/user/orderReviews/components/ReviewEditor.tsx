@@ -1,7 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from "react";
 import type { OrderItemModel } from "../../../../features/order/models/order.model";
 import type { AvailableReview } from "../../../../features/review";
 import { useCloudMediaUpload } from "../../../../../../shared/features/cloudMedia/hooks/useCloudMediaUpload";
+
+export interface ReviewEditorHandle {
+    isDirty: () => boolean;
+}
 
 interface ReviewEditorProps {
     orderId: number;
@@ -12,14 +16,14 @@ interface ReviewEditorProps {
     onUpdateReview?: (reviewId: number, rating: number, content: string, imageUrls?: string[]) => void;
 }
 
-export const ReviewEditor: React.FC<ReviewEditorProps> = ({
+export const ReviewEditor = forwardRef<ReviewEditorHandle, ReviewEditorProps>(({
     orderId,
     selectedItem,
     existingReview,
     isSubmitting,
     onSubmitReview,
     onUpdateReview
-}) => {
+}, ref) => {
     const [isEditing, setIsEditing] = useState(false);
     const [rating, setRating] = useState(5);
     const [hoverRating, setHoverRating] = useState<number | null>(null);
@@ -48,6 +52,14 @@ export const ReviewEditor: React.FC<ReviewEditorProps> = ({
         setError("");
         setMediaError("");
     };
+
+    // ponytail: simple dirty check comparing current vs initial values; upgrade to deep-equal if imageUrls editing matters
+    const initialContent = existingReview?.content ?? "";
+    const initialRating = existingReview?.rating ?? 5;
+
+    useImperativeHandle(ref, () => ({
+        isDirty: () => content !== initialContent || rating !== initialRating
+    }), [content, rating, initialContent, initialRating]);
 
     useEffect(() => {
         resetToExisting();
@@ -418,5 +430,6 @@ export const ReviewEditor: React.FC<ReviewEditorProps> = ({
             </div>
         </div>
     );
-};
+});
 
+ReviewEditor.displayName = "ReviewEditor";

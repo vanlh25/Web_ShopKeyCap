@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useOrderReviewsController } from "./orderReviews.controller";
 import { ProductListSidebar } from "./components/ProductListSidebar";
 import { ReviewEditor } from "./components/ReviewEditor";
+import type { ReviewEditorHandle } from "./components/ReviewEditor";
 import { ReviewSummary } from "./components/ReviewSummary";
 
 export const OrderReviewsPage: React.FC = () => {
@@ -17,6 +18,17 @@ export const OrderReviewsPage: React.FC = () => {
         updateReviewMutation,
         refetchReviews
     } = useOrderReviewsController();
+
+    const reviewEditorRef = useRef<ReviewEditorHandle>(null);
+
+    const handleSelectProductWithConfirm = (productId: number) => {
+        if (reviewEditorRef.current?.isDirty()) {
+            if (!window.confirm('Bạn có thay đổi chưa lưu trên sản phẩm này. Bạn có chắc chắn muốn chuyển sang sản phẩm khác không?')) {
+                return;
+            }
+        }
+        handleSelectProduct(productId);
+    };
 
     if (isLoading) {
         return (
@@ -94,13 +106,14 @@ export const OrderReviewsPage: React.FC = () => {
                         order={order}
                         availableReviews={availableReviews}
                         selectedProductId={selectedProductId}
-                        onSelectProduct={handleSelectProduct}
+                        onSelectProduct={handleSelectProductWithConfirm}
                     />
                 </div>
 
                 {/* Center Column: Review Editor */}
                 <div className="lg:col-span-8 xl:col-span-5 h-full">
                     <ReviewEditor 
+                        ref={reviewEditorRef}
                         orderId={order.id}
                         selectedItem={selectedItem}
                         existingReview={existingReview}
