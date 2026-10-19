@@ -147,7 +147,7 @@ export const FlashSalePage: React.FC = () => {
                                 </div>
                                 <p className="text-xs text-slate-500 mt-1 font-medium">
                                     {isUpcoming
-                                        ? `Khung giờ sẽ mở bán vào ${new Date(activeSlot.startTime).toLocaleString('vi-VN')}`
+                                        ? `Khung giờ sẽ mở bán vào ${new Date(activeSlot.startTime).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}`
                                         : 'Săn deal ngay trước khi thời gian kết thúc hoặc hết suất ưu đãi'}
                                 </p>
                             </div>
