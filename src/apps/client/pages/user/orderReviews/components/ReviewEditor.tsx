@@ -307,8 +307,16 @@ export const ReviewEditor: React.FC<ReviewEditorProps> = ({
                                 maxLength={1000}
                             />
                             {error && <p className="text-rose-500 text-sm mt-1.5 font-medium">{error}</p>}
-                            <div className="text-right text-xs text-slate-400 mt-1.5">
-                                {content.length}/1000 ký tự
+                            <div className="flex justify-between text-xs mt-1.5">
+                                <span className="text-slate-400">
+                                    {content.trim().length}/1000 ký tự
+                                    {content.length !== content.trim().length && content.trim().length < 10 && (
+                                        <span className="text-amber-500 ml-1">(khoảng trắng đầu/cuối không được tính)</span>
+                                    )}
+                                </span>
+                                {content.trim().length < 10 && content.length > 0 && (
+                                    <span className="text-amber-500 font-medium">Cần tối thiểu 10 ký tự</span>
+                                )}
                             </div>
                         </div>
 
