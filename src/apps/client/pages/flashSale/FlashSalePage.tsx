@@ -9,7 +9,7 @@ import { useDocumentTitle } from '../../../../core/hooks/useDocumentTitle';
 export const FlashSalePage: React.FC = () => {
     useDocumentTitle('Săn Flash Sale Giờ Vàng - Cyber Key');
 
-    const { data: flashSaleData, isLoading } = useActiveFlashSaleQuery();
+    const { data: flashSaleData, isLoading, refetch } = useActiveFlashSaleQuery();
     const [selectedSlotIndex, setSelectedSlotIndex] = useState<number>(0);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -160,6 +160,7 @@ export const FlashSalePage: React.FC = () => {
                                 label={isUpcoming ? 'MỞ BÁN SAU:' : 'KẾT THÚC TRONG:'}
                                 variant="large"
                                 theme={isUpcoming ? 'light' : 'danger'}
+                                onExpire={() => refetch()}
                             />
                         </div>
                     </div>

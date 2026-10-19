@@ -10,7 +10,7 @@ export const ProductDetailPage = () => {
     const controller = useProductDetailViewModel();
     const { product, isLoading, error } = controller;
     const { data: flashSaleItem } = useVariantFlashSaleQuery(controller.currentVariant?.id);
-    const { data: activeFlashSale } = useActiveFlashSaleQuery();
+    const { data: activeFlashSale, refetch: refetchFlashSale } = useActiveFlashSaleQuery();
     const remainingSeconds = activeFlashSale?.currentSlot?.remainingSeconds || 0;
 
     if (isLoading) {
@@ -37,7 +37,7 @@ export const ProductDetailPage = () => {
 
             {/* Breadcrumb Navigation */}
             <div className="flex items-center gap-2 text-[14px] text-slate-500 font-medium mb-8 overflow-x-auto whitespace-nowrap">
-                <span onClick={() => controller.handleNavigateFilter('categorySlug', '')} className="hover:text-blue-600 cursor-pointer">Trang chủ</span>
+                <span onClick={() => controller.handleNavigateHome()} className="hover:text-blue-600 cursor-pointer">Trang chủ</span>
                 <span className="material-icons-outlined text-[16px]">chevron_right</span>
                 <span onClick={() => controller.handleNavigateFilter('categorySlug', product.category.slug)} className="hover:text-blue-600 cursor-pointer">
                     {product.category.name}
@@ -94,7 +94,7 @@ export const ProductDetailPage = () => {
                                 </div>
                                 {remainingSeconds > 0 && (
                                     <div className="flex items-center gap-2">
-                                        <CountdownTimer initialSeconds={remainingSeconds} variant="compact" theme="danger" label="KẾT THÚC TRONG" />
+                                        <CountdownTimer initialSeconds={remainingSeconds} variant="compact" theme="danger" label="KẾT THÚC TRONG" onExpire={() => refetchFlashSale()} />
                                     </div>
                                 )}
                             </div>

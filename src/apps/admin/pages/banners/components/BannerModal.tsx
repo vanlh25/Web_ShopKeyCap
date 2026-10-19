@@ -149,13 +149,14 @@ export const BannerModal: React.FC<Props> = ({
 
             <div className="flex items-center gap-6">
               <div className="flex-1">
-                <label className="block text-sm font-medium text-slate-700 mb-1">Thứ tự hiển thị</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Thứ tự hiển thị <span className="text-red-500">*</span></label>
                 <input 
-                  {...register('displayOrder', { valueAsNumber: true })}
+                  {...register('displayOrder', { required: 'Vui lòng nhập thứ tự hiển thị', valueAsNumber: true })}
                   type="number" 
-                  min="1"
+                  min="0"
                   className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm"
                 />
+                {errors.displayOrder && <p className="mt-1 text-sm text-red-500">{errors.displayOrder.message as string}</p>}
               </div>
 
               <div className="flex-1 flex flex-col justify-end h-full pt-6">

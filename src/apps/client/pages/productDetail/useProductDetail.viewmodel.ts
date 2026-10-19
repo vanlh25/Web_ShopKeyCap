@@ -164,6 +164,10 @@ export const useProductDetailViewModel = () => {
         });
     };
 
+    const handleNavigateHome = () => {
+        navigate('/');
+    };
+
     const handleNavigateFilter = (filterKey: string, filterValue: string) => {
         navigate(`/products?${filterKey}=${filterValue}`);
     };
@@ -207,6 +211,7 @@ export const useProductDetailViewModel = () => {
         handleQuantityChange,
         handleAddToCart,
         handleBuyNow,
+        handleNavigateHome,
         handleNavigateFilter,
 
         handleToggleFavorite,

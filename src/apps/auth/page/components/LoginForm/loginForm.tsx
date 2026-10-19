@@ -28,7 +28,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onNavigate }) => {
             <form onSubmit={controller.handleSubmit} className="space-y-2">
                 <div>
                     <label htmlFor="email" className="block text-[13px] font-medium text-[#334155] mb-1.5">
-                        Địa chỉ Email
+                        Địa chỉ Email <span className="text-red-500">*</span>
                     </label>
                     <input
                         type="email"
@@ -43,7 +43,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onNavigate }) => {
 
                 <div>
                     <label htmlFor="password" className="block text-[13px] font-medium text-[#334155] mb-1.5">
-                        Mật khẩu
+                        Mật khẩu <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                         <input
