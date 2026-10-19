@@ -17,7 +17,9 @@ export const useOrderCheckoutController = () => {
     const items = state?.items || [];
     const cartItemIds = state?.cartItemIds || [];
 
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<EPaymentMethod>(EPaymentMethod.COD);
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<EPaymentMethod>(() => {
+        return (sessionStorage.getItem('checkoutPaymentMethod') as EPaymentMethod) || EPaymentMethod.COD;
+    });
 
     // Modal states
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
@@ -25,6 +27,10 @@ export const useOrderCheckoutController = () => {
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [selectedAddressId, setSelectedAddressId] = useState<number | undefined>();
 
+    // Persist payment method to sessionStorage
+    useEffect(() => {
+        sessionStorage.setItem('checkoutPaymentMethod', selectedPaymentMethod);
+    }, [selectedPaymentMethod]);
     // Queries
     const {
         data: preparedData,
