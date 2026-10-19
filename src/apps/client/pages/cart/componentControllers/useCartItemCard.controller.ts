@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { ChangeEvent, KeyboardEvent } from "react";
 import type { CartItemModel } from "../../../features/cart/model/cart.model";
+import { useToastStore } from "../../../../../core/store/useToastStore";
 
 export const useCartItemCardController = (
     item: CartItemModel,
@@ -9,6 +10,7 @@ export const useCartItemCardController = (
     const targetId = item.variant?.id || item.product.id;
     const quantity = item.variant?.quantity || 1;
     const stockQuantity = item.variant?.stockQuantity ?? 0;
+    const toast = useToastStore(state => state.addToast);
 
     const [inputValue, setInputValue] = useState(quantity.toString());
 
@@ -28,8 +30,10 @@ export const useCartItemCardController = (
         let validValue = parseInt(inputValue, 10);
         
         if (isNaN(validValue) || validValue < 1) {
+            toast("Số lượng không hợp lệ. Đã tự động điều chỉnh về 1.", "warning");
             validValue = 1;
         } else if (stockQuantity > 0 && validValue > stockQuantity) {
+            toast(`Số lượng vượt quá tồn kho (${stockQuantity}). Đã điều chỉnh về mức tối đa.`, "warning");
             validValue = stockQuantity;
         }
         
