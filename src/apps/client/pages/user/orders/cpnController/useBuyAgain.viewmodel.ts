@@ -2,10 +2,12 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { OrderItemModel } from '../../../../features/order/models/order.model';
 import { useAddToCartMutation } from '../../../../features/cart/hooks/mutations/useAddToCart.mutation';
+import { useToastStore } from '../../../../../../core/store/useToastStore';
 
 export const useBuyAgainViewModel = (items: OrderItemModel[]) => {
     const navigate = useNavigate();
     const addToCartMutation = useAddToCartMutation();
+    const addToast = useToastStore((s) => s.addToast);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     // Key: item.id (order item id) — luôn unique, không phụ thuộc variantId từ backend
@@ -17,14 +19,19 @@ export const useBuyAgainViewModel = (items: OrderItemModel[]) => {
             // Đơn hàng chỉ có 1 sản phẩm — thêm thẳng, không cần popup
             addToCartMutation.mutate(
                 { variantId: items[0].variantId, quantity: 1 },
-                { onSuccess: () => navigate('/cart') }
+                {
+                    onSuccess: () => navigate('/cart'),
+                    onError: (err) => {
+                        addToast(err.message || 'Sản phẩm đã hết hàng hoặc không còn tồn tại.', 'error');
+                    }
+                }
             );
         } else {
             // Nhiều sản phẩm — mở popup, mặc định tick tất cả
             setSelectedItemIds(new Set(items.map((i) => i.id)));
             setIsModalOpen(true);
         }
-    }, [items, addToCartMutation, navigate]);
+    }, [items, addToCartMutation, navigate, addToast]);
 
     // Toggle theo item.id
     const toggleItem = useCallback((itemId: number) => {
@@ -48,19 +55,30 @@ export const useBuyAgainViewModel = (items: OrderItemModel[]) => {
                 (i) => selectedItemIds.has(i.id) && i.variantId
             );
             // Gọi song song, dùng allSettled để không bị block khi 1 item lỗi
-            await Promise.allSettled(
+            const results = await Promise.allSettled(
                 selectedItems.map((item) =>
                     addToCartMutation.mutateAsync({ variantId: item.variantId, quantity: 1 })
                 )
             );
+
+            const failedItems = selectedItems.filter((_, idx) => results[idx].status === 'rejected');
+            const successCount = selectedItems.length - failedItems.length;
+
+            if (failedItems.length > 0) {
+                const failedNames = failedItems.map((i) => i.productName).join(', ');
+                addToast(`Sản phẩm đã hết hàng: ${failedNames}`, 'error');
+            }
+
+            if (successCount > 0) {
+                navigate('/cart');
+            }
         } catch (e) {
             console.error('[BuyAgain] Lỗi khi thêm vào giỏ:', e);
         } finally {
             setIsAdding(false);
             setIsModalOpen(false);
-            navigate('/cart');
         }
-    }, [selectedItemIds, items, addToCartMutation, navigate]);
+    }, [selectedItemIds, items, addToCartMutation, navigate, addToast]);
 
 
     const handleCloseModal = useCallback(() => {
